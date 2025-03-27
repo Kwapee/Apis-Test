@@ -1,0 +1,2 @@
+C:/Users/perry/demo1/Apis-Test/test_1/android/app/.cxx/Debug/4iws5l73/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/perry/demo1/Apis-Test/test_1/android/app/.cxx/Debug/4iws5l73/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,7 +1,12 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:http/http.dart' as http show get;
+import 'package:test_1/model/user.dart';
+//import 'package:test_1/model/user.dart';
+import 'package:test_1/model/user_name.dart';
+import 'package:test_1/service/user_api.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key});
@@ -9,113 +14,48 @@ class TopPage extends StatefulWidget {
   @override
   State<TopPage> createState() => _TopPageState();
 }
-  
 
 class _TopPageState extends State<TopPage> {
-  late String 
-      // ignore: unused_field
-      _item,
-      // ignore: unused_field
-      _payment,
-      // ignore: unused_field
-      _delivery;
+  List<User> users = [];
 
-  
-  final itemController = TextEditingController();
-  final paymentController = TextEditingController();
-  final deliveryController = TextEditingController();
-  final _Key = GlobalKey<FormState>();
-
-  bool validate() {
-    if (_Key.currentState!.validate()) {
-      _Key.currentState!.save();
-      return true;
-    } else {
-      return false;
-    }
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(right: 50.0),
-          child: Center(
-            child: Column(children: [
-              Text(
-                "Top Up",
-                style: TextStyle(color: Colors.black),
-              ),
-              
-            ]),
-          ),
+        backgroundColor: Colors.blue,
+        title: const Center(
+          child: Column(children: [
+            Text(
+              "API Testing",
+              style: TextStyle(color: Colors.black),
+            ),
+          ]),
         ),
       ),
-      body:
-        Column(
-          children: [
-            Padding(
-                      padding: const EdgeInsets.only(top: 100, left: 50,),
-                      child: TextFormField(
-                        controller: paymentController,
-                        decoration: const InputDecoration(
-                          labelText: 'Mode Of Payment',
-                          hintText: 'VISA/MOMO/CREDITCARD/PAYPAL',
-                          suffixIcon: Icon(
-                            FontAwesomeIcons.paypal,
-                            size: 17,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty && value.length < 4) {
-                            return 'Provide a valid mode';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _payment = value!;
-                        },
-                      ),
-                    ),
-               Padding(
-                  padding: const EdgeInsets.only(top: 1.0 ,left: 100,),
-                  child: TextFormField(
-                    controller: itemController,
-                    decoration: const InputDecoration(
-                      labelText: 'Amount',
-                      hintText: 'Enter the preferred amount',
-                      suffixIcon: Icon(
-                        FontAwesomeIcons.envelope,
-                        size: 17,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty && value.length <= 2) {
-                        return 'Provide a valid number';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _item = value!;
-                    },
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 10.0,  right: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                      
-                    }, 
-                      child: const Text('Top Up'),
-                    ),
-                  ),     
-          ],
-        ),
-                
-                
-               
-              
+      body: ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            final user = users[index];
+            final email = user.email;
+            final Color = user.gender == 'male' ? Colors.blue : Colors.red;
+            return ListTile(
+              title: Text(user.name.title),
+              subtitle: Text(user.phone),
+            );
+          }),
     );
+  }
+
+  Future<void> fetchUsers() async {
+    final response = await UserApi.fetchUsers();
+    setState(() {
+      users = response;
+    });
   }
 }
