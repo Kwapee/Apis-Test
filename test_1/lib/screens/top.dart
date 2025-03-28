@@ -45,8 +45,8 @@ class _TopPageState extends State<TopPage> {
             final email = user.email;
             final Color = user.gender == 'male' ? Colors.blue : Colors.red;
             return ListTile(
-              title: Text(user.name.title),
-              subtitle: Text(user.phone),
+              title: Text(user.fullName),
+              subtitle: Text(user.location.city),
             );
           }),
     );
